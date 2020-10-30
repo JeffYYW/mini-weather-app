@@ -111,7 +111,7 @@ export default App;
 Dev:
 -convert date format
 -toggle Celcius & Farenheit
--create 'today's highlights cards'
+-create 'today's highlights cards' 
 -create modal to hold search form and search results
 
 Styling:
