@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { asyncGetCurrentPosition, getLocationId, getLocationData, getLocationsByName } from './utils/utils';
+import './App.css';
 
 import Theme from './Theme';
 import SearchForm from './components/SearchForm';
 import DayCard from './components/DayCard';
 import SearchModal from './components/SearchModal';
 import LocationsList from './components/LocationsList';
+import PrimaryDisplay from './components/PrimaryDisplay';
+import ButtonsContainer from './components/ButtonsContainer';
+import CurrentLocationWeather from './components/CurrentLocationWeather';
 
 const App = () => {
   const [locationData, setLocationData] = useState(null);
+  const [locationInput, setLocationInput] = useState('');
+  const [locationsList, setLocationsList] = useState(null);
+  const [searchModalShown, setSearchModalShown] = useState(false);
+
+  useEffect(() => {
+    searchModalShown ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'visible';
+  }, [searchModalShown])
 
   // async functions return a promise
   const getCurrentLocationData = async () => {
@@ -24,9 +35,6 @@ const App = () => {
       console.log(error.message);
     }
   }
-
-  const [locationInput, setLocationInput] = useState('');
-  const [locationsList, setLocationsList] = useState(null);
 
   const handleLocationSubmit = async (e) => {
     e.preventDefault();
@@ -56,13 +64,10 @@ const App = () => {
     if (locationData) {
       const { consolidated_weather, title } = locationData;
       return (
-        // return a component
-        <div>
-          <h1>{consolidated_weather[0].the_temp}</h1>
-          <h2>{consolidated_weather[0].weather_state_name}</h2>
-          <h3>{consolidated_weather[0].applicable_date}</h3>
-          <h4>{title}</h4>
-        </div>
+        <CurrentLocationWeather 
+          consolidated_weather={consolidated_weather} 
+          title={title}
+        />
       )
     }
   }
@@ -80,29 +85,21 @@ const App = () => {
     }
   }
 
-  const [searchModalShown, setSearchModalShown] = useState(false);
-
-  useEffect(() => {
-    searchModalShown ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'visible';
-  }, [searchModalShown])
-
   return(
     <Theme>
       <>
-        <button 
-          onClick={getCurrentLocationData}
+        <PrimaryDisplay>
+          <ButtonsContainer 
+            getCurrentLocationData={getCurrentLocationData} 
+            setSearchModalShown={setSearchModalShown} 
+          />
+          {renderCurrentLocation()}
+        </PrimaryDisplay>
+
+        <SearchModal 
+          isShown={searchModalShown} 
+          setSearchModalShown={setSearchModalShown}
         >
-          Geo
-        </button>
-        
-        <button 
-          onClick={() => setSearchModalShown(true)}
-        >
-          Search Here
-        </button>
-        
-        <SearchModal isShown={searchModalShown}>
-          <button onClick={() => setSearchModalShown(false)}>Close</button>
           <SearchForm
             locations={locationInput}
             handleLocationSubmit={handleLocationSubmit}
@@ -111,7 +108,6 @@ const App = () => {
           {renderLocationsList()}
         </SearchModal>
 
-        {renderCurrentLocation()}
         {console.log(locationData)}
 
         {renderWeekData()}
@@ -130,6 +126,7 @@ Dev:
 -toggle Celcius & Farenheit
 -create 'today's highlights cards' 
 -create modal to hold search form and search results
+-loading states
 
 Styling:
 Everything

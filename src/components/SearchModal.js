@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ModalContainer = styled.div`
-  border: 1px solid red;
   height: 100vh;
   position: fixed;
   overflow-y: scroll;
@@ -13,13 +12,23 @@ const ModalContainer = styled.div`
   padding: 15px;
   background-color: ${props => props.theme.colors.primary};
   color: ${props => props.theme.colors.white};
+  display: flex;
+  flex-direction: column;
 `;  
 
-const SearchModal = ({ isShown, children}) => {
+const StyledButton = styled.button`
+  align-self: flex-end;
+  margin-bottom: 16px;
+`;
+
+const SearchModal = ({ isShown, setSearchModalShown ,children}) => {
 
   return (
     <>
-    {isShown ? <ModalContainer>{children}</ModalContainer> : null}
+    {isShown ? <ModalContainer>
+      <StyledButton onClick={() => setSearchModalShown(false)}>Close</StyledButton>
+      {children}
+      </ModalContainer> : null}
     </>
   )
 
