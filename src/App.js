@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { asyncGetCurrentPosition, getLocationId, getLocationData, getLocationsByName } from './utils/utils';
 
+import Theme from './Theme';
 import SearchForm from './components/SearchForm';
 import DayCard from './components/DayCard';
+import SearchModal from './components/SearchModal';
+import LocationsList from './components/LocationsList';
 
 const App = () => {
   const [locationData, setLocationData] = useState(null);
@@ -35,23 +38,17 @@ const App = () => {
     setLocationInput(e.target.value);
   }
 
-  const handleLocationClick = async (id) => {
-    let location = await getLocationData(id);
-    setLocationData(location);
-  }
-
   const renderLocationsList = () => {
     if (locationsList) {
-      return locationsList.map((item, index) => (
-        // return a component
-        <li
-          key={index}
-          data-id={item.woeid}
-          onClick={() => handleLocationClick(item.woeid)}
-        >
-          {item.title}
-        </li>
-      ))
+      return (
+        <LocationsList
+          locationsList={locationsList}
+          setLocationData={setLocationData}
+          setSearchModalShown={setSearchModalShown}
+        />
+      )
+    } else {
+      return null
     }
   }
 
@@ -83,24 +80,44 @@ const App = () => {
     }
   }
 
+  const [searchModalShown, setSearchModalShown] = useState(false);
+
+  useEffect(() => {
+    searchModalShown ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'visible';
+  }, [searchModalShown])
+
   return(
-    <div>
-      <button onClick={getCurrentLocationData}>Geo</button>
-      
-      <SearchForm 
-        locations={locationInput}
-        handleLocationSubmit={handleLocationSubmit}
-        handleLocationChange={handleLocationChange}
-      />
+    <Theme>
+      <>
+        <button 
+          onClick={getCurrentLocationData}
+        >
+          Geo
+        </button>
+        
+        <button 
+          onClick={() => setSearchModalShown(true)}
+        >
+          Search Here
+        </button>
+        
+        <SearchModal isShown={searchModalShown}>
+          <button onClick={() => setSearchModalShown(false)}>Close</button>
+          <SearchForm
+            locations={locationInput}
+            handleLocationSubmit={handleLocationSubmit}
+            handleLocationChange={handleLocationChange}
+          />
+          {renderLocationsList()}
+        </SearchModal>
 
-      <ul>{renderLocationsList()}</ul>
+        {renderCurrentLocation()}
+        {console.log(locationData)}
 
-      {renderCurrentLocation()}
-      {console.log(locationData)}
-
-      {renderWeekData()}
-      
-    </div>
+        {renderWeekData()}
+        
+      </>
+    </Theme>
   );
 }
 
