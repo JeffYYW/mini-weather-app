@@ -4,12 +4,13 @@ import './App.css';
 
 import Theme from './Theme';
 import SearchForm from './components/SearchForm';
-import DayCard from './components/DayCard';
 import SearchModal from './components/SearchModal';
 import LocationsList from './components/LocationsList';
 import PrimaryDisplay from './components/PrimaryDisplay';
+import SecondaryDisplay from './components/SecondaryDisplay';
 import ButtonsContainer from './components/ButtonsContainer';
 import CurrentLocationWeather from './components/CurrentLocationWeather';
+import WeekContainer from './components/WeekContainer';
 
 const App = () => {
   const [locationData, setLocationData] = useState(null);
@@ -76,11 +77,7 @@ const App = () => {
     if (locationData) {
       const { consolidated_weather } = locationData;
       return(
-        <ul>
-          {consolidated_weather.slice(1).map(day => {
-            return <DayCard key={day.id} day={day} />
-          })}
-        </ul>
+        <WeekContainer consolidated_weather={consolidated_weather} />
       )
     }
   }
@@ -110,8 +107,9 @@ const App = () => {
 
         {console.log(locationData)}
 
-        {renderWeekData()}
-        
+        <SecondaryDisplay>
+          {renderWeekData()}
+        </SecondaryDisplay>
       </>
     </Theme>
   );

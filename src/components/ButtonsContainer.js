@@ -22,7 +22,7 @@ const StyledGeo = styled.button`
   border: none;
 `;
 
-const ButtonContainer = ({ getCurrentLocationData, setSearchModalShown }) => {
+const ButtonsContainer = ({ getCurrentLocationData, setSearchModalShown }) => {
   return(
     <StyledContainer>
       <StyledSearch onClick={() => setSearchModalShown(true)}>
@@ -35,4 +35,4 @@ const ButtonContainer = ({ getCurrentLocationData, setSearchModalShown }) => {
   )
 }
 
-export default ButtonContainer;
+export default ButtonsContainer;
