@@ -11,6 +11,7 @@ import SecondaryDisplay from './components/SecondaryDisplay';
 import ButtonsContainer from './components/ButtonsContainer';
 import CurrentLocationWeather from './components/CurrentLocationWeather';
 import WeekContainer from './components/WeekContainer';
+import Highlights from './components/Highlights';
 
 const App = () => {
   const [locationData, setLocationData] = useState(null);
@@ -82,6 +83,15 @@ const App = () => {
     }
   }
 
+  const renderHighlights = () => {
+    if (locationData) {
+      const { consolidated_weather } = locationData;
+      return(
+        <Highlights consolidated_weather={consolidated_weather[0]} />
+      )
+    }
+  }
+
   return(
     <Theme>
       <>
@@ -109,6 +119,7 @@ const App = () => {
 
         <SecondaryDisplay>
           {renderWeekData()}
+          {renderHighlights()}
         </SecondaryDisplay>
       </>
     </Theme>

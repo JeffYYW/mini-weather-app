@@ -7,7 +7,8 @@ const theme = {
     secondary: '#100e1d',
     tertiary: '#3c47e9',
     grey: '#6e707a',
-    white: '#ffffff'
+    white: '#e7e7eb',
+    purewhite: '#ffffff'
   },
   fonts: {
     base: '18px'
